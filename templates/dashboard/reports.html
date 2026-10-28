@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Reports{% endblock %}
+{% block content %}
+<div class="container my-4">
+  <h2 class="mb-4">Reports</h2>
+  <div class="row g-3 mb-4">
+    <div class="col-md-3"><div class="card p-3 text-center"><h3>{{ stats.total_books }}</h3><small class="text-muted">Books</small></div></div>
+    <div class="col-md-3"><div class="card p-3 text-center"><h3>{{ stats.total_members }}</h3><small class="text-muted">Members</small></div></div>
+    <div class="col-md-3"><div class="card p-3 text-center"><h3>{{ stats.borrowed_books }}</h3><small class="text-muted">Active Borrows</small></div></div>
+    <div class="col-md-3"><div class="card p-3 text-center"><h3>{{ stats.overdue_books }}</h3><small class="text-muted">Overdue</small></div></div>
+  </div>
+  <a href="{% url 'borrow:history' %}" class="btn btn-outline-primary"><i class="fa-solid fa-clock-rotate-left"></i> Full Borrow History</a>
+  <a href="{% url 'borrow:overdue' %}" class="btn btn-outline-danger"><i class="fa-solid fa-triangle-exclamation"></i> Overdue Books</a>
+  <a href="{% url 'borrow:export_csv' %}" class="btn btn-accent"><i class="fa-solid fa-file-csv"></i> Export CSV</a>
+</div>
+{% endblock %}

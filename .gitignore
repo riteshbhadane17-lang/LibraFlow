@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+venv/
+env/
+.venv/
+
+# Django
+db.sqlite3
+staticfiles/
+media/*
+!media/.gitkeep
+
+# LibraFlow runtime artifacts
+backups/*.json
+backups/*.csv
+backups/*.pdf
+logs/*.log
+
+# Env
+.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store

@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="container my-4">
+  <h2 class="mb-4">Dashboard</h2>
+
+  {% if notifications %}
+    <div class="alert alert-warning d-flex align-items-start">
+      <i class="fa-solid fa-triangle-exclamation me-2 mt-1"></i>
+      <div>
+        <strong>{{ notifications|length }} unread alert(s)</strong>
+        <ul class="mb-0 small mt-1">
+          {% for n in notifications %}
+            <li>{{ n.message }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+      <div class="stat-card bg-primary-grad">
+        <div class="stat-number">{{ stats.total_books }}</div>
+        <div class="stat-label">Total Books</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-card bg-secondary-grad">
+        <div class="stat-number">{{ stats.available_books }}</div>
+        <div class="stat-label">Available</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-card bg-accent-grad">
+        <div class="stat-number">{{ stats.borrowed_books }}</div>
+        <div class="stat-label">Borrowed</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-card bg-danger-grad">
+        <div class="stat-number">{{ stats.overdue_books }}</div>
+        <div class="stat-label">Overdue</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-card bg-primary-grad">
+        <div class="stat-number">{{ stats.total_members }}</div>
+        <div class="stat-label">Members</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-card bg-secondary-grad">
+        <div class="stat-number">{{ stats.today_borrow }}</div>
+        <div class="stat-label">Today's Borrows</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-card bg-accent-grad">
+        <div class="stat-number">{{ stats.today_return }}</div>
+        <div class="stat-label">Today's Returns</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-card bg-primary-grad">
+        <a href="{% url 'borrow:borrow' %}" class="text-white text-decoration-none">
+          <div class="stat-number"><i class="fa-solid fa-plus"></i></div>
+          <div class="stat-label">New Borrow</div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-lg-7">
+      <div class="card p-3">
+        <h5 class="mb-3">Recent Activity</h5>
+        <table class="table table-sm align-middle">
+          <thead><tr><th>Member</th><th>Book</th><th>Borrowed</th><th>Status</th></tr></thead>
+          <tbody>
+          {% for r in recent %}
+            <tr>
+              <td>{{ r.member_id }}</td>
+              <td>{{ r.book_id }}</td>
+              <td>{{ r.borrow_date|date:"d M Y" }}</td>
+              <td>
+                {% if r.status == "overdue" %}<span class="badge badge-overdue">Overdue</span>
+                {% elif r.status == "returned" %}<span class="badge bg-secondary">Returned</span>
+                {% else %}<span class="badge badge-borrowed">Borrowed</span>{% endif %}
+              </td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="4" class="text-muted text-center">No activity yet.</td></tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-lg-5">
+      <div class="card p-3">
+        <h5 class="mb-3">Most Borrowed Books</h5>
+        <ol class="mb-0">
+          {% for item in most_borrowed %}
+            <li>{{ item._id }} &mdash; <span class="text-muted">{{ item.borrow_count }} time(s)</span></li>
+          {% empty %}
+            <li class="text-muted">No borrowing data yet.</li>
+          {% endfor %}
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

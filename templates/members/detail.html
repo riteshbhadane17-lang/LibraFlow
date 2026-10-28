@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}{{ member.name }}{% endblock %}
+{% block content %}
+<div class="container my-4">
+  <div class="d-flex justify-content-between align-items-start mb-4">
+    <div>
+      <h2>{{ member.name }}</h2>
+      <p class="text-muted mb-0">{{ member.email }} &middot; {{ member.phone }}</p>
+      <span class="badge bg-light text-dark">{{ member.membership_type }}</span>
+    </div>
+    <form method="post" action="{% url 'members:delete' member.member_id %}" onsubmit="return confirmDelete('Delete this member?')">
+      {% csrf_token %}
+      <button class="btn btn-outline-danger" type="submit"><i class="fa-solid fa-trash"></i> Delete</button>
+    </form>
+  </div>
+
+  <div class="row g-3 mb-4">
+    <div class="col-md-4"><div class="card p-3 text-center"><h4>{{ member.borrowed_book_ids|length }}</h4><small class="text-muted">Currently Borrowed</small></div></div>
+    <div class="col-md-4"><div class="card p-3 text-center"><h4>{{ member.max_books }}</h4><small class="text-muted">Borrow Limit</small></div></div>
+    <div class="col-md-4"><div class="card p-3 text-center"><h4>{{ member.fines_due }}</h4><small class="text-muted">Fines Due</small></div></div>
+  </div>
+
+  <h5>Borrow History</h5>
+  <table class="table table-sm bg-white">
+    <thead><tr><th>Book</th><th>Borrowed</th><th>Due</th><th>Status</th></tr></thead>
+    <tbody>
+    {% for r in history %}
+      <tr>
+        <td>{{ r.book_id }}</td>
+        <td>{{ r.borrow_date|date:"d M Y" }}</td>
+        <td>{{ r.due_date|date:"d M Y" }}</td>
+        <td>
+          {% if r.status == "overdue" %}<span class="badge badge-overdue">Overdue</span>
+          {% elif r.status == "returned" %}<span class="badge bg-secondary">Returned</span>
+          {% else %}<span class="badge badge-borrowed">Borrowed</span>{% endif %}
+        </td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="4" class="text-muted text-center">No borrow history.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
